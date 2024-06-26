@@ -38,6 +38,7 @@ const refresh = () => {
 }
 
 app.get('/memories', (req, res) => { 
+    console.log(readdirSync(__dirname))
     refresh();
     res.send(memories_list)
 })
