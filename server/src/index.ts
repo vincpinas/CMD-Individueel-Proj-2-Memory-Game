@@ -12,7 +12,7 @@ const app = express()
 app.use(cors())
 app.use(express.json());
 app.use('/memory', express.static(path.join(__dirname, 'memories')))
-const port = 3000
+const port = process.env.PORT || 3000
 const file_regex = /\.(jpg|jpeg|png)$/;
 
 const storage = multer.diskStorage(

@@ -9,7 +9,9 @@
       "resolveJsonModule": true,
       "moduleDetection": "force",
       "isolatedModules": true,
-      "outDir": "./dist"
+      "outDir": "./dist",
+      "rootDir": "./src",
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }
