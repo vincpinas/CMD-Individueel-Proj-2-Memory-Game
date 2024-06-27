@@ -9,7 +9,6 @@ export default class Game {
         this.memories = [];
         this.flipped = [];
         this.correct = [];
-        this.reset_loop = null;
         this.flip_permissions = false;
 
         this.init();
@@ -17,13 +16,11 @@ export default class Game {
 
     async init() {
         this.memories = await fetchMemories();
-
         this.createCards();
         this.set_reset_loop();
     }
 
     setCardCss(amount) {
-        console.log(amount)
         if (document.querySelector("style")) document.querySelector("style").remove();
 
         const mobile_large = 676;
@@ -37,21 +34,21 @@ export default class Game {
         const style = createEl("style");
         style.innerHTML = `
             .game {
-                grid-template-rows: repeat(${rows_cols.rows}, 160px);
-                grid-template-columns: repeat(${rows_cols.columns}, 100px);
+                grid-template-rows: repeat(${rows_cols.rows}, 10rem);
+                grid-template-columns: repeat(${rows_cols.columns}, 6.5rem);
             }
 
             @media screen and (max-width: ${mobile_large}px) {
                 .game {
-                    grid-template-rows: repeat(${rows_cols.rows}, 110px);
-                    grid-template-columns: repeat(${rows_cols.columns}, 70px);
+                    grid-template-rows: repeat(${rows_cols.rows}, 7rem);
+                    grid-template-columns: repeat(${rows_cols.columns}, 4.5rem);
                 }
             }
 
             @media screen and (max-width: ${mobile_small}px) {
                 .game {
-                    grid-template-rows: repeat(${rows_cols.rows}, 90px);
-                    grid-template-columns: repeat(${rows_cols.columns}, 60px);
+                    grid-template-rows: repeat(${rows_cols.rows}, 4.5rem);
+                    grid-template-columns: repeat(${rows_cols.columns}, 3rem);
                 }
             }
         `
@@ -60,6 +57,8 @@ export default class Game {
 
     async createCards(replace = false) {
         const memories = await get_random_memories(this.memories, this.card_amount / 2);
+
+        this.card_amount = memories.length;
 
         if (replace) {
             this.game_deck.innerHTML = "";
@@ -97,8 +96,8 @@ export default class Game {
     }
 
     set_reset_loop() {
-        this.resetInterval = setInterval(() => {
-            if (this.correct.length === this.card_amount) {
+        setInterval(() => {
+            if (this.correct.length === this.card_amount && this.card_amount > 2) {
                 this.reset();
             }
         }, 400)
@@ -134,11 +133,10 @@ export default class Game {
     }
 
     async reset() {
-        clearInterval(this.reset_loop);
-        this.reset_loop = null;
         this.flipped = [];
         this.correct = [];
         this.flip_permissions = false;
+        this.card_amount = 12;
         this.memories = await fetchMemories();
 
         const child_elements = Array.from(this.game_deck.children);
@@ -149,7 +147,6 @@ export default class Game {
 
         setTimeout(() => { this.createCards(true) }, this.flip_delay)
 
-        this.set_reset_loop();
         this.flip_permissions = true;
     }
 }

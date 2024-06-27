@@ -37,12 +37,12 @@ button {
     border: none;
     background: rgb(var(--primary));
     border-bottom: 4px solid rgb(var(--primary-shadow));
-    padding: 10px 15px;
+    padding: 0.5rem 1rem;
     text-transform: uppercase;
     color: #FFFFFF;
     font-weight: bold;
     transition: 400ms;
-    height: 40px;
+    height: 2.5rem;
 
     &:hover {
         transform: translateY(4px);
@@ -278,14 +278,14 @@ html {
     }
 
     & > button {
-        height: 40px;
+        height: 2.5rem;
         margin-top: 0.5rem;
     }
 
     .upload_wrapper {
         height: 100%;
         width: 100%;
-        border: 1px dashed rgb(var(--primary));
+        border: 2px dashed rgb(var(--primary));
         margin-bottom: 1rem;
         display: flex;
         flex-direction: column;

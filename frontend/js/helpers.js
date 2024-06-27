@@ -19,6 +19,8 @@ export async function get_random_memories(arr, amount) {
 }
 
 export function compare_cards(card_arr) {
+    if(typeof card_arr[0] === "undefined" | typeof card_arr[1] === "undefined") return;
+
     let card_one_memory = card_arr[0].memory;
     let card_two_memory = card_arr[1].memory;
 
