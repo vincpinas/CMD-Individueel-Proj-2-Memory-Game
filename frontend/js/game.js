@@ -23,6 +23,7 @@ export default class Game {
     }
 
     setCardCss(amount) {
+        console.log(amount)
         if (document.querySelector("style")) document.querySelector("style").remove();
 
         const mobile_large = 676;
@@ -58,7 +59,7 @@ export default class Game {
     }
 
     async createCards(replace = false) {
-        const memories = get_random_memories(this.memories, this.card_amount / 2);
+        const memories = await get_random_memories(this.memories, this.card_amount / 2);
 
         if (replace) {
             this.game_deck.innerHTML = "";

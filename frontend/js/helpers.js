@@ -1,4 +1,4 @@
-export function get_random_memories(arr, amount) {
+export async function get_random_memories(arr, amount) {
     for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [arr[i], arr[j]] = [arr[j], arr[i]];
@@ -13,7 +13,9 @@ export function get_random_memories(arr, amount) {
         result.splice(randomIndex, 0, selected_elements[i]);
     }
 
-    return result;
+    return new Promise((resolve, reject) => {
+        resolve(result);
+    });
 }
 
 export function compare_cards(card_arr) {
