@@ -14,7 +14,7 @@
   },
   "scripts": {
     "dev": "nodemon",
-    "build": "yarn && tsc && copyfiles -u 1 src/memories/**/* dist/memories",
+    "build": "yarn && tsc",
     "start": "node ./dist/index.js"
   },
   "dependencies": {

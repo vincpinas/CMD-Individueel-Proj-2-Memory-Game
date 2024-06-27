@@ -38,8 +38,16 @@ export function createEl(type, className) {
     return el;
 }
 
+const API_URL = (() => {
+    if(window.location.href.includes("localhost")) {
+        return "https://server-shy-glade-362.fly.dev"
+    } else {
+        return "https://server-shy-glade-362.fly.dev";
+    }
+})()
+
 export const fetchMemories = async () => {
-    const response = await fetch("http://localhost:3000/memories");
+    const response = await fetch(`${API_URL}/memories`);
     const data = await response.json()
 
     return data;
@@ -52,11 +60,13 @@ export const uploadMemories = async (files) => {
         form_data.append("memories", file)
     })
 
-    const response = await fetch("http://localhost:3000/upload", {
+    const response = await fetch(`${API_URL}/upload`, {
         method: "POST",
         body: form_data,
     });
     const data = await response.json();
+
+    console.log(data)
 
     return data;
 }

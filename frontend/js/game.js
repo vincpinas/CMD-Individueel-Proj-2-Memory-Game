@@ -3,11 +3,14 @@ import { get_random_memories, createEl, compare_cards, fetchMemories } from "./h
 export default class Game {
     constructor() {
         this.card_amount = 8;
-        this.memories = [];
+        this.flip_delay = 650
         this.game_deck = document.querySelector("section.game")
+
+        this.memories = [];
         this.flipped = [];
         this.correct = [];
-        this.flipDelay = 650
+        this.reset_loop = null;
+        this.flip_permissions = false;
 
         this.init();
     }
@@ -16,16 +19,15 @@ export default class Game {
         this.memories = await fetchMemories();
 
         this.createCards();
-
-        setInterval(() => {
-            if(this.correct.length === this.card_amount) {
-                this.reset();
-            }
-        }, 400)
+        this.set_reset_loop();
     }
 
-    async createCards() {
+    async createCards(replace = false) {
         const memories = get_random_memories(this.memories, this.card_amount / 2);
+
+        if (replace) {
+            this.game_deck.innerHTML = "";
+        }
 
         memories.forEach(memory => {
             const card = createEl("div", "card");
@@ -38,36 +40,47 @@ export default class Game {
 
             card_inner.appendChild(card_front)
             card_inner.appendChild(card_back)
-            card_inner.style.transition = `transform ${this.flipDelay}ms`
+            card_inner.style.transition = `transform ${this.flip_delay}ms`
             card.appendChild(card_inner)
 
             card.dataset.flip = true;
             card.dataset.id = memory.id;
 
             card.addEventListener("click", (e) => {
-                this.flipCard(e.target, memory)
-                this.checkCards();
+                if(this.flip_permissions === false) return;
+                this.flip_card(e.target, memory)
+                this.check_cards();
             })
 
             this.game_deck.appendChild(card)
         })
+
+        this.flip_permissions = true;
     }
 
-    flipCard(target, memory) {
+    set_reset_loop() {
+        this.resetInterval = setInterval(() => {
+            if (this.correct.length === this.card_amount) {
+                this.reset();
+            }
+        }, 400)
+    }
+
+    flip_card(target, memory) {
         if (this.flipped.length >= 2) return;
         if (target.dataset.flip == false) return;
         if (target.classList.contains("flipped")) return;
 
-        this.flipped.push({ el: target, memory})
+        this.flipped.push({ el: target, memory })
         target.className = "card flipped"
     }
 
-    checkCards() {
+    check_cards() {
         if (this.flipped.length !== 2) return;
 
         setTimeout(() => {
             let correct = compare_cards(this.flipped);
-            
+
             if (correct) {
                 this.flipped.forEach(card => {
                     card.el.dataset.flip = false;
@@ -79,10 +92,26 @@ export default class Game {
                 })
             }
             this.flipped = [];
-        }, this.flipDelay + 100)
+        }, this.flip_delay + 100)
     }
 
-    reset() {
-        location.reload();
+    async reset() {
+        clearInterval(this.reset_loop);
+        this.reset_loop = null;
+        this.flipped = [];
+        this.correct = [];
+        this.flip_permissions = false;
+        this.memories = await fetchMemories();
+
+        const child_elements = Array.from(this.game_deck.children);
+
+        child_elements.forEach(child => {
+            if (child.classList.contains("flipped")) child.classList.remove("flipped")
+        })
+
+        setTimeout(() => { this.createCards(true) }, this.flip_delay)
+
+        this.set_reset_loop();
+        this.flip_permissions = true;
     }
 }

@@ -12,9 +12,6 @@ export default class Library {
         this.active_thumbnail = null;
 
         this.setup_menu();
-
-        if(JSON.parse(localStorage.getItem("open_menu"))) this.open_library();
-        localStorage.setItem("open_menu", false)
     }
 
     // Functions
@@ -134,8 +131,8 @@ export default class Library {
         })
 
         upload_button.addEventListener("click", async () => {
-            localStorage.setItem("open_menu", true)
             await uploadMemories(upload_input.files);
+            this.change_view_overview();
         })
 
         this.view_el.appendChild(upload_input)
