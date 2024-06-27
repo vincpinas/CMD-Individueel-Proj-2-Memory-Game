@@ -17,7 +17,6 @@ export default class Game {
     async init() {
         this.memories = await fetchMemories();
         this.createCards();
-        this.set_reset_loop();
     }
 
     setCardCss(amount) {
@@ -95,14 +94,6 @@ export default class Game {
         this.flip_permissions = true;
     }
 
-    set_reset_loop() {
-        setInterval(() => {
-            if (this.correct.length === this.card_amount && this.card_amount > 2) {
-                this.reset();
-            }
-        }, 400)
-    }
-
     flip_card(target, memory) {
         if (this.flipped.length >= 2) return;
         if (target.dataset.flip == false) return;
@@ -129,6 +120,10 @@ export default class Game {
                 })
             }
             this.flipped = [];
+
+            if (this.correct.length === this.card_amount && this.card_amount > 2) {
+                this.reset();
+            }
         }, this.flip_delay + 100)
     }
 
