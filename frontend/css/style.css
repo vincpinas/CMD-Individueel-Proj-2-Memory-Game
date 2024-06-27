@@ -68,10 +68,7 @@ html {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-
     display: grid;
-    grid-template-rows: repeat(2, 160px);
-    grid-template-columns: repeat(4, 100px);
 
     .card {
         width: 100%;
@@ -319,11 +316,6 @@ html {
 }
 
 @media screen and (max-width: 676px) {
-    .game {
-        grid-template-rows: repeat(2, 110px);
-        grid-template-columns: repeat(4, 70px);
-    }
-
     .library_view.overview {
         flex-direction: column;
 
@@ -351,12 +343,5 @@ html {
         width: 100%;
         display: flex;
         flex-direction: column;
-    }
-}
-
-@media screen and (max-width: 400px) {
-    .game {
-        grid-template-rows: repeat(2, 90px);
-        grid-template-columns: repeat(4, 60px);
     }
 }

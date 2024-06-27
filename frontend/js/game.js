@@ -2,7 +2,7 @@ import { get_random_memories, createEl, compare_cards, fetchMemories } from "./h
 
 export default class Game {
     constructor() {
-        this.card_amount = 8;
+        this.card_amount = 12;
         this.flip_delay = 650
         this.game_deck = document.querySelector("section.game")
 
@@ -22,12 +22,49 @@ export default class Game {
         this.set_reset_loop();
     }
 
+    setCardCss(amount) {
+        if (document.querySelector("style")) document.querySelector("style").remove();
+
+        const mobile_large = 676;
+        const mobile_small = 400;
+        let rows_cols = {};
+
+        if (amount <= 4) rows_cols = { rows: 1, columns: amount };
+        else if (amount <= 8) rows_cols = { rows: 2, columns: 4 };
+        else if (amount <= 12) rows_cols = { rows: 3, columns: 4 };
+
+        const style = createEl("style");
+        style.innerHTML = `
+            .game {
+                grid-template-rows: repeat(${rows_cols.rows}, 160px);
+                grid-template-columns: repeat(${rows_cols.columns}, 100px);
+            }
+
+            @media screen and (max-width: ${mobile_large}px) {
+                .game {
+                    grid-template-rows: repeat(${rows_cols.rows}, 110px);
+                    grid-template-columns: repeat(${rows_cols.columns}, 70px);
+                }
+            }
+
+            @media screen and (max-width: ${mobile_small}px) {
+                .game {
+                    grid-template-rows: repeat(${rows_cols.rows}, 90px);
+                    grid-template-columns: repeat(${rows_cols.columns}, 60px);
+                }
+            }
+        `
+        document.body.appendChild(style);
+    }
+
     async createCards(replace = false) {
         const memories = get_random_memories(this.memories, this.card_amount / 2);
 
         if (replace) {
             this.game_deck.innerHTML = "";
         }
+
+        this.setCardCss(memories.length);
 
         memories.forEach(memory => {
             const card = createEl("div", "card");
@@ -47,7 +84,7 @@ export default class Game {
             card.dataset.id = memory.id;
 
             card.addEventListener("click", (e) => {
-                if(this.flip_permissions === false) return;
+                if (this.flip_permissions === false) return;
                 this.flip_card(e.target, memory)
                 this.check_cards();
             })
