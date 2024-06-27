@@ -1,12 +1,13 @@
 import { createEl, fetchMemories, uploadMemories } from "./helpers.js";
 
 export default class Library {
-    constructor() {
+    constructor(gameObj) {
         this.menu_items = {
             close: document.querySelector("#library_close_button"),
             overview: document.querySelector("#library_cv_overview"),
             upload: document.querySelector("#library_cv_upload")
         }
+        this.gameObj = gameObj;
         this.view_el = document.querySelector(".library_view");
         this.current_view = null;
         this.memories = [];
@@ -145,6 +146,7 @@ export default class Library {
         upload_button.addEventListener("click", async () => {
             await uploadMemories(upload_input.files);
             this.change_view_overview();
+            this.gameObj.reset()
         })
 
         upload_wrapper.appendChild(upload_icon)
