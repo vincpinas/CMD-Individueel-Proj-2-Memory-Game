@@ -5,6 +5,7 @@
 }
 
 :root {
+    --font: sans-serif;
     --background: 255, 250, 240;
     --background900: 255, 215, 0;
     --text: 0, 0, 0;
@@ -62,13 +63,19 @@ html {
     background: rgb(var(--background900));
     padding: 1rem;
     gap: 1rem;
-    width: fit-content;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
     display: grid;
-    grid-template-columns: auto auto auto auto;
+    grid-template-rows: repeat(2, 160px);
+    grid-template-columns: repeat(4, 100px);
 
     .card {
-        width: 100px;
-        height: 160px;
+        width: 100%;
+        height: 100%;
 
         &.flipped .card-inner {
             transform: rotateY(-180deg);
@@ -234,13 +241,8 @@ html {
     flex-direction: column;
     padding: 1rem;
 
-    input {
-        height: 100%;
-        width: 100%;
-    }
-
     h2 {
-        font-family: sans-serif;
+        font-family: var(--font);
         text-transform: uppercase;
     }
 
@@ -265,7 +267,7 @@ html {
         }
 
         .name, .size {
-            font-family: sans-serif;
+            font-family: var(--font);
         }
 
         .name {
@@ -281,5 +283,80 @@ html {
     & > button {
         height: 40px;
         margin-top: 0.5rem;
+    }
+
+    .upload_wrapper {
+        height: 100%;
+        width: 100%;
+        border: 1px dashed rgb(var(--primary));
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        gap: 1rem;
+
+        img {
+            width: 3rem;
+        }
+
+        p {
+            font-family: var(--font);
+        }
+
+        u {
+            color: rgb(var(--primary));
+        }
+
+        input {
+            height: inherit;
+            width: inherit;
+            position: absolute;
+            opacity: 0;
+        }
+    }
+}
+
+@media screen and (max-width: 676px) {
+    .game {
+        grid-template-rows: repeat(2, 110px);
+        grid-template-columns: repeat(4, 70px);
+    }
+
+    .library_view.overview {
+        flex-direction: column;
+
+        & > div {
+            width: 100%;
+            max-height: 10rem;
+            flex-direction: row;
+            margin-top: auto;
+            display: none;
+        }
+    }
+
+    .library_menu {
+        height: 100%;
+        padding: 1rem 0.5rem;
+    
+        button {
+            height: fit-content;
+        }
+    }
+    
+    .library_view {
+        height: 100%;
+        background: rgb(var(--background));
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .game {
+        grid-template-rows: repeat(2, 90px);
+        grid-template-columns: repeat(4, 60px);
     }
 }

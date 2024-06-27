@@ -8,6 +8,7 @@ export default class Library {
             upload: document.querySelector("#library_cv_upload")
         }
         this.view_el = document.querySelector(".library_view");
+        this.current_view = null;
         this.memories = [];
         this.active_thumbnail = null;
 
@@ -39,6 +40,9 @@ export default class Library {
     // ------------------------
 
     async change_view_overview() {
+        if(this.current_view === "overview") return;
+        this.current_view = "overview";
+
         this.memories = await fetchMemories();
 
         this.clear_menu_select();
@@ -76,10 +80,18 @@ export default class Library {
     }
 
     change_view_upload() {
+        if(this.current_view === "upload") return;
+        this.current_view = "upload";
+
         this.clear_menu_select();
         this.menu_select("upload");
         this.view_el.innerHTML = "";
 
+        const upload_wrapper = createEl("div", "upload_wrapper")
+        const upload_icon = createEl("img")
+        upload_icon.src = "ImageIcon.svg"
+        const upload_text = createEl("p")
+        upload_text.innerHTML = "Drag & Drop your files here or <u>Choose here</u>"
         const upload_input = createEl("input")
         upload_input.type = "file"
         upload_input.setAttribute("multiple", true)
@@ -104,7 +116,7 @@ export default class Library {
                 const name = createEl("p", "name")
                 name.innerHTML = file.name;
                 const size = createEl("p", "size")
-                size.innerHTML = `${file.size / 1000} mb`
+                size.innerHTML = `${file.size / 1000} kb`
 
                 remove.addEventListener("click", () => {
                     const dt = new DataTransfer();
@@ -135,7 +147,10 @@ export default class Library {
             this.change_view_overview();
         })
 
-        this.view_el.appendChild(upload_input)
+        upload_wrapper.appendChild(upload_icon)
+        upload_wrapper.appendChild(upload_text)
+        upload_wrapper.appendChild(upload_input)
+        this.view_el.appendChild(upload_wrapper)
         this.view_el.appendChild(file_heading)
         this.view_el.appendChild(file_list)
         this.view_el.appendChild(upload_button)
