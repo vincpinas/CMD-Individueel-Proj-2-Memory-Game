@@ -36,7 +36,6 @@ const getMemories = () => {
 }
 
 app.get('/memories', (req, res) => { 
-    console.log(memoriesDir, readdirSync(memoriesDir))
     res.send(getMemories())
 })
 
