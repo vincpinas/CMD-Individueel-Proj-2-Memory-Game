@@ -41,7 +41,7 @@ export default class Library {
     // ------------------------
 
     async change_view_overview() {
-        if(this.current_view === "overview") return;
+        if (this.current_view === "overview") return;
         this.current_view = "overview";
 
         this.memories = await fetchMemories();
@@ -81,12 +81,14 @@ export default class Library {
     }
 
     change_view_upload() {
-        if(this.current_view === "upload") return;
+        if (this.current_view === "upload") return;
         this.current_view = "upload";
 
         this.clear_menu_select();
         this.menu_select("upload");
         this.view_el.innerHTML = "";
+
+        let clickable = true;
 
         const upload_wrapper = createEl("div", "upload_wrapper")
         const upload_icon = createEl("img")
@@ -144,6 +146,8 @@ export default class Library {
         })
 
         upload_button.addEventListener("click", async () => {
+            if (clickable === false) return;
+            clickable = false;
             await uploadMemories(upload_input.files);
             this.change_view_overview();
             this.gameObj.reset()
