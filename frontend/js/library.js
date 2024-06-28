@@ -126,7 +126,7 @@ export default class Library {
                     const files = e.target.files;
 
                     for (let i = 0; i < files.length; i++) {
-                        if (files[i].name !== file.name) {
+                        if (files[i].name !== file.name && files[i].size < 9000) {
                             dt.items.add(files[i]);
                         }
                     }
